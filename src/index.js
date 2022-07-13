@@ -11,15 +11,17 @@ module.exports = function check(str, bracketsConfig) {
             const closeBracket = bracketsConfig[bracketsConfigIndex][1];
             const lastStackBracket = bracketsStack[bracketsStack.length - 1];
 
-            if (bracketsStack.length === 0) {
+            const isPush = (bracketsStack.length === 0 ||
+                (openBracket === closeBracket && lastStackBracket !== openBracket) ||
+                (openBracket !== closeBracket && char === openBracket));
+
+            const isPop = ((openBracket !== closeBracket && char === closeBracket &&
+                    lastStackBracket === openBracket) ||
+                (openBracket === closeBracket && lastStackBracket === openBracket));
+
+            if (isPush) {
                 bracketsStack.push(char);
-            } else if (openBracket === closeBracket && lastStackBracket === openBracket) {
-                bracketsStack.pop();
-            } else if (openBracket === closeBracket && lastStackBracket !== openBracket) {
-                bracketsStack.push(char);
-            } else if (openBracket !== closeBracket && char === openBracket) {
-                bracketsStack.push(char);
-            } else if (openBracket !== closeBracket && char === closeBracket && lastStackBracket === openBracket) {
+            } else if (isPop) {
                 bracketsStack.pop();
             } else {
                 return false;
