@@ -13,15 +13,13 @@ module.exports = function check(str, bracketsConfig) {
 
             if (bracketsStack.length === 0) {
                 bracketsStack.push(char);
-            } else if (openBracket === closeBracket) {
-                if (lastStackBracket === openBracket) {
-                    bracketsStack.pop();
-                } else {
-                    bracketsStack.push(char);
-                }
-            } else if (char === openBracket) {
+            } else if (openBracket === closeBracket && lastStackBracket === openBracket) {
+                bracketsStack.pop();
+            } else if (openBracket === closeBracket && lastStackBracket !== openBracket) {
                 bracketsStack.push(char);
-            } else if (char === closeBracket && lastStackBracket === openBracket) {
+            } else if (openBracket !== closeBracket && char === openBracket) {
+                bracketsStack.push(char);
+            } else if (openBracket !== closeBracket && char === closeBracket && lastStackBracket === openBracket) {
                 bracketsStack.pop();
             } else {
                 return false;
